@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Types for our data structures
@@ -25,6 +24,14 @@ export interface Store {
   items: Item[];
 }
 
+// Add this interface
+export interface StoreOwner {
+  id: string;
+  name: string;
+  email: string;
+  provider: string;
+}
+
 // Context type
 interface DataContextType {
   stores: Store[];
@@ -33,6 +40,10 @@ interface DataContextType {
   getStore: (id: string) => Store | undefined;
   getItem: (storeId: string, itemId: string) => Item | undefined;
   searchItems: (storeId: string, query: string) => Item[];
+  isStoreOwnerLoggedIn: boolean;
+  currentStoreOwner: StoreOwner | null;
+  loginStoreOwner: (userData: StoreOwner) => void;
+  logoutStoreOwner: () => void;
 }
 
 // Create context
@@ -41,6 +52,10 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 // Provider component
 export const DataProvider = ({ children }: { children: ReactNode }) => {
   const [stores, setStores] = useState<Store[]>([]);
+  const [storeOwner, setStoreOwner] = useState<StoreOwner | null>(() => {
+    const saved = localStorage.getItem('storeOwner');
+    return saved ? JSON.parse(saved) : null;
+  });
 
   // Load data from localStorage on component mount
   useEffect(() => {
@@ -117,7 +132,17 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     addItem,
     getStore,
     getItem,
-    searchItems
+    searchItems,
+    isStoreOwnerLoggedIn: !!storeOwner,
+    currentStoreOwner: storeOwner,
+    loginStoreOwner: (userData: StoreOwner) => {
+      setStoreOwner(userData);
+      localStorage.setItem('storeOwner', JSON.stringify(userData));
+    },
+    logoutStoreOwner: () => {
+      setStoreOwner(null);
+      localStorage.removeItem('storeOwner');
+    }
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

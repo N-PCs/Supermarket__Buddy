@@ -1,12 +1,13 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../contexts/DataContext';
 import UploadMapForm from '../components/UploadMapForm';
 import StoreMap from '../components/StoreMap';
+import StoreOwnerAuth from '../components/StoreOwnerAuth';
 
 const StoreOwnerPage = () => {
-  const { addStore } = useData();
+  const { addStore, isStoreOwnerLoggedIn } = useData();
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [storeData, setStoreData] = useState<any>(null);
@@ -34,6 +35,17 @@ const StoreOwnerPage = () => {
     // Navigate to the manage items page for the new store
     navigate(`/manage-store/${storeId}`);
   };
+
+  if (!isStoreOwnerLoggedIn) {
+    return (
+      <div className="container mx-auto py-10 px-6">
+        <h1 className="text-3xl font-bold mb-8 text-center">Store Owner Portal</h1>
+        <div className="max-w-md mx-auto">
+          <StoreOwnerAuth />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-10 px-6">
