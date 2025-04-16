@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useData } from '../contexts/DataContext';
 import { Button } from "@/components/ui/button";
-import { Sparkles } from 'lucide-react';
+import { Sparkles, MapPin } from 'lucide-react';
 
 const Navbar = () => {
   const { isStoreOwnerLoggedIn, currentStoreOwner, logoutStoreOwner } = useData();
@@ -15,7 +15,12 @@ const Navbar = () => {
         </Link>
         <div className="flex items-center gap-6">
           <Link to="/" className="hover:text-blue-600 transition-colors">Home</Link>
-          <Link to="/stores" className="hover:text-blue-600 transition-colors">Find Stores</Link>
+          <Link to="/stores" className="hover:text-blue-600 transition-colors">
+            <span className="flex items-center gap-1">
+              <MapPin size={16} />
+              Find Stores
+            </span>
+          </Link>
           
           {isStoreOwnerLoggedIn ? (
             <div className="flex items-center gap-4">

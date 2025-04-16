@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { Upload, Map } from 'lucide-react';
 import AIMapConverter from './AIMapConverter';
+import GoogleMapsLocationPicker from './GoogleMapsLocationPicker';
 
 interface UploadMapFormProps {
   onSubmit: (data: any) => void;
@@ -12,6 +13,7 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
   const [storeAddress, setStoreAddress] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [mapData, setMapData] = useState<any>(null);
+  const [storeLocation, setStoreLocation] = useState<{lat: number; lng: number} | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,9 +25,9 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
       file: file,
       // Pass AI processed map data if available
       aiProcessedMap: mapData,
-      // In a real app, you'd also send coordinates after geocoding the address
-      coordinates: {
-        lat: 40.7128, // Example coordinates (New York)
+      // Pass the selected store location from Google Maps
+      coordinates: storeLocation || {
+        lat: 40.7128, // Default coordinates (New York)
         lng: -74.0060
       }
     });
@@ -35,10 +37,16 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
     setStoreAddress('');
     setFile(null);
     setMapData(null);
+    setStoreLocation(null);
   };
 
   const handleMapProcessed = (processedData: any) => {
     setMapData(processedData);
+  };
+
+  const handleLocationSelect = (location: { lat: number; lng: number; address: string }) => {
+    setStoreLocation({ lat: location.lat, lng: location.lng });
+    setStoreAddress(location.address);
   };
 
   return (
@@ -70,6 +78,14 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
           required
           className="input-field"
           placeholder="123 Main St, City, State, ZIP"
+        />
+      </div>
+      
+      {/* Google Maps Location Picker */}
+      <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+        <GoogleMapsLocationPicker 
+          onLocationSelect={handleLocationSelect}
+          initialLocation={storeLocation || undefined}
         />
       </div>
       
