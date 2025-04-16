@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Types for our data structures
@@ -35,8 +36,8 @@ export interface StoreOwner {
 // Context type
 interface DataContextType {
   stores: Store[];
-  addStore: (store: Omit<Store, 'id' | 'items'>) => void;
-  addItem: (item: Omit<Item, 'id'>) => void;
+  addStore: (store: Omit<Store, 'id' | 'items'>) => string;
+  addItem: (item: Omit<Item, 'id'>) => string;
   getStore: (id: string) => Store | undefined;
   getItem: (storeId: string, itemId: string) => Item | undefined;
   searchItems: (storeId: string, query: string) => Item[];
@@ -82,6 +83,10 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
       items: []
     };
     setStores(prev => [...prev, newStore]);
+    
+    // Save store ID to localStorage for easy navigation
+    localStorage.setItem('lastStoreId', newStore.id);
+    
     return newStore.id;
   };
 

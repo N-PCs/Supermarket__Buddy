@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useData } from '../contexts/DataContext';
 import { Button } from "@/components/ui/button";
-import { Sparkles, MapPin } from 'lucide-react';
+import { Sparkles, MapPin, Image } from 'lucide-react';
 
 const Navbar = () => {
   const { isStoreOwnerLoggedIn, currentStoreOwner, logoutStoreOwner } = useData();
@@ -29,6 +29,10 @@ const Navbar = () => {
                 <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full flex items-center">
                   <Sparkles size={12} className="mr-1" /> AI Layout
                 </span>
+              </Link>
+              <Link to={`/store-media/${localStorage.getItem('lastStoreId') || ''}`} className="flex items-center gap-2 hover:text-blue-600 transition-colors">
+                <Image size={16} />
+                Media
               </Link>
               <span className="text-sm text-gray-600">
                 {currentStoreOwner?.name}

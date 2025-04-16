@@ -1,9 +1,9 @@
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useData, Item } from '../contexts/DataContext';
 import ItemForm from '../components/ItemForm';
 import StoreMap from '../components/StoreMap';
+import Image from '../components/Image';
 
 const ManageStorePage = () => {
   const { storeId } = useParams<{ storeId: string }>();
@@ -11,14 +11,14 @@ const ManageStorePage = () => {
   const [selectedItem, setSelectedItem] = useState<Item | null>(null);
   const [showForm, setShowForm] = useState(true);
 
-  // Handle invalid store ID
-  if (!storeId) {
-    return <Navigate to="/store-owner" />;
-  }
+  useEffect(() => {
+    if (storeId) {
+      localStorage.setItem('lastStoreId', storeId);
+    }
+  }, [storeId]);
 
   const store = getStore(storeId);
   
-  // Handle store not found
   if (!store) {
     return <Navigate to="/store-owner" />;
   }
@@ -34,23 +34,28 @@ const ManageStorePage = () => {
     });
     
     setShowForm(false);
-    // Reset form after brief delay
     setTimeout(() => setShowForm(true), 100);
   };
 
   return (
     <div className="container mx-auto py-10 px-6">
-      <div className="flex flex-wrap items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Manage: {store.name}</h1>
-          <p className="text-gray-600">{store.address}</p>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Manage {store.name}</h1>
+        <div className="flex gap-3">
+          <Link 
+            to={`/store-media/${storeId}`}
+            className="btn-secondary flex items-center gap-2"
+          >
+            <Image size={16} />
+            <span>Manage Media</span>
+          </Link>
+          <Link 
+            to={`/store/${storeId}`}
+            className="btn-outline"
+          >
+            View Store
+          </Link>
         </div>
-        <Link 
-          to={`/store/${storeId}`}
-          className="btn-secondary mt-4 sm:mt-0"
-        >
-          View Store Page
-        </Link>
       </div>
       
       {/* Statistics */}

@@ -14,6 +14,7 @@ import StoresPage from "./pages/StoresPage";
 import StorePage from "./pages/StorePage";
 import StoreOwnerPage from "./pages/StoreOwnerPage";
 import ManageStorePage from "./pages/ManageStorePage";
+import StoreMediaPage from "./pages/StoreMediaPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
                 <Route path="/store/:storeId" element={<StorePage />} />
                 <Route path="/store-owner" element={<StoreOwnerPage />} />
                 <Route path="/manage-store/:storeId" element={<ManageStorePage />} />
+                <Route path="/store-media/:storeId" element={<StoreMediaPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>

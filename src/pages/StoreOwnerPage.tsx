@@ -42,6 +42,10 @@ const StoreOwnerPage = () => {
     // Navigate to the manage items page for the new store
     navigate(`/manage-store/${storeId}`);
   };
+  
+  const handleGoToMedia = (storeId: string) => {
+    navigate(`/store-media/${storeId}`);
+  };
 
   if (!isStoreOwnerLoggedIn) {
     return (
