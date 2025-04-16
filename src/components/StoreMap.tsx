@@ -1,5 +1,5 @@
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -17,13 +17,15 @@ interface StoreMapProps {
     name: string;
     coordinates: [number, number];
   };
+  aiProcessedMap?: any;
   viewOnly?: boolean;
 }
 
-const StoreMap = ({ storeData, selectedItem, viewOnly = false }: StoreMapProps) => {
+const StoreMap = ({ storeData, selectedItem, aiProcessedMap, viewOnly = false }: StoreMapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -47,12 +49,70 @@ const StoreMap = ({ storeData, selectedItem, viewOnly = false }: StoreMapProps) 
 
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
+    // If we have AI processed map data with an image
+    if (aiProcessedMap && aiProcessedMap.imageUrl) {
+      map.current.on('load', () => {
+        // This would be where you'd overlay the store layout image
+        // For a real implementation, you would need to properly georeference the image
+        console.log("AI map data available, would overlay store layout here");
+        setImageLoaded(true);
+        
+        // Add aisles as lines if available
+        if (aiProcessedMap.layout && aiProcessedMap.layout.aisles) {
+          aiProcessedMap.layout.aisles.forEach((aisle: any) => {
+            if (map.current && aisle.coordinates && aisle.coordinates.length >= 2) {
+              map.current.addSource(`aisle-${aisle.id}`, {
+                'type': 'geojson',
+                'data': {
+                  'type': 'Feature',
+                  'properties': {
+                    'name': aisle.name
+                  },
+                  'geometry': {
+                    'type': 'LineString',
+                    'coordinates': aisle.coordinates
+                  }
+                }
+              });
+              
+              map.current.addLayer({
+                'id': `aisle-${aisle.id}`,
+                'type': 'line',
+                'source': `aisle-${aisle.id}`,
+                'layout': {
+                  'line-join': 'round',
+                  'line-cap': 'round'
+                },
+                'paint': {
+                  'line-color': '#4287f5',
+                  'line-width': 6
+                }
+              });
+            }
+          });
+        }
+        
+        // Add sections as points if available
+        if (aiProcessedMap.layout && aiProcessedMap.layout.sections) {
+          aiProcessedMap.layout.sections.forEach((section: any) => {
+            if (map.current && section.coordinates) {
+              // Add marker for each section
+              new mapboxgl.Marker({ color: '#2ca02c' })
+                .setLngLat(section.coordinates)
+                .setPopup(new mapboxgl.Popup().setHTML(`<h3>${section.name}</h3>`))
+                .addTo(map.current);
+            }
+          });
+        }
+      });
+    }
+
     return () => {
       if (map.current) {
         map.current.remove();
       }
     };
-  }, [storeData]);
+  }, [storeData, aiProcessedMap]);
 
   // Add or update marker when selected item changes
   useEffect(() => {
@@ -93,7 +153,30 @@ const StoreMap = ({ storeData, selectedItem, viewOnly = false }: StoreMapProps) 
           </div>
         </div>
       ) : null}
-      <div ref={mapContainer} className="map-container" />
+      
+      {aiProcessedMap && aiProcessedMap.imageUrl && !imageLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg z-5">
+          <div className="text-center p-4">
+            <p className="font-medium text-gray-700">Loading store layout...</p>
+          </div>
+        </div>
+      )}
+      
+      <div ref={mapContainer} className="map-container h-[400px] rounded-lg" />
+      
+      {aiProcessedMap && aiProcessedMap.suggestions && aiProcessedMap.suggestions.length > 0 && (
+        <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">
+          <h3 className="font-medium mb-2">AI-Suggested Item Placements</h3>
+          <div className="space-y-2">
+            {aiProcessedMap.suggestions.map((item: any, index: number) => (
+              <div key={index} className="flex items-center justify-between text-sm">
+                <span>{item.name}</span>
+                <span className="text-gray-600">{item.section}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

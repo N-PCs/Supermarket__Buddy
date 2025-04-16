@@ -1,6 +1,7 @@
 
 import { useState } from 'react';
 import { Upload, Map } from 'lucide-react';
+import AIMapConverter from './AIMapConverter';
 
 interface UploadMapFormProps {
   onSubmit: (data: any) => void;
@@ -10,6 +11,7 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
   const [storeName, setStoreName] = useState('');
   const [storeAddress, setStoreAddress] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [mapData, setMapData] = useState<any>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,6 +21,8 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
       name: storeName,
       address: storeAddress,
       file: file,
+      // Pass AI processed map data if available
+      aiProcessedMap: mapData,
       // In a real app, you'd also send coordinates after geocoding the address
       coordinates: {
         lat: 40.7128, // Example coordinates (New York)
@@ -30,6 +34,11 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
     setStoreName('');
     setStoreAddress('');
     setFile(null);
+    setMapData(null);
+  };
+
+  const handleMapProcessed = (processedData: any) => {
+    setMapData(processedData);
   };
 
   return (
@@ -107,6 +116,18 @@ const UploadMapForm = ({ onSubmit }: UploadMapFormProps) => {
           )}
         </div>
       </div>
+      
+      {/* AI Map Converter */}
+      <AIMapConverter file={file} onMapProcessed={handleMapProcessed} />
+      
+      {mapData && (
+        <div className="bg-green-50 border border-green-100 rounded-lg p-4">
+          <p className="text-green-700 font-medium">Map processed successfully!</p>
+          <p className="text-sm text-gray-600">
+            We've detected {mapData.layout.aisles.length} aisles and {mapData.layout.sections.length} sections in your store.
+          </p>
+        </div>
+      )}
       
       <div className="flex justify-end">
         <button type="submit" className="btn-primary">

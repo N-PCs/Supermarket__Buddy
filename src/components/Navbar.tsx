@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useData } from '../contexts/DataContext';
 import { Button } from "@/components/ui/button";
+import { Sparkles } from 'lucide-react';
 
 const Navbar = () => {
   const { isStoreOwnerLoggedIn, currentStoreOwner, logoutStoreOwner } = useData();
@@ -18,7 +19,12 @@ const Navbar = () => {
           
           {isStoreOwnerLoggedIn ? (
             <div className="flex items-center gap-4">
-              <Link to="/store-owner" className="hover:text-blue-600 transition-colors">My Store</Link>
+              <Link to="/store-owner" className="flex items-center gap-2 hover:text-blue-600 transition-colors">
+                My Store
+                <span className="bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full flex items-center">
+                  <Sparkles size={12} className="mr-1" /> AI Layout
+                </span>
+              </Link>
               <span className="text-sm text-gray-600">
                 {currentStoreOwner?.name}
               </span>

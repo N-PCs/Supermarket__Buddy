@@ -11,6 +11,7 @@ const StoreOwnerPage = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [storeData, setStoreData] = useState<any>(null);
+  const [aiProcessedMap, setAiProcessedMap] = useState<any>(null);
 
   const handleStoreSubmit = (data: any) => {
     // In a real app, we would process the map file
@@ -25,6 +26,12 @@ const StoreOwnerPage = () => {
     };
     
     setStoreData(newStore);
+    
+    // If AI processed the map, save that data too
+    if (data.aiProcessedMap) {
+      setAiProcessedMap(data.aiProcessedMap);
+    }
+    
     setStep(2);
   };
 
@@ -79,6 +86,7 @@ const StoreOwnerPage = () => {
             <h2 className="text-2xl font-semibold mb-6 text-center">Upload Your Store Map</h2>
             <p className="text-gray-600 mb-8 text-center">
               Start by providing your store details and uploading a map of your store layout.
+              Our AI can automatically convert your layout image into an interactive map.
             </p>
             <UploadMapForm onSubmit={handleStoreSubmit} />
           </div>
@@ -97,9 +105,20 @@ const StoreOwnerPage = () => {
                     lat: storeData.coordinates.lat,
                     lng: storeData.coordinates.lng
                   }}
+                  aiProcessedMap={aiProcessedMap}
                   viewOnly={true}
                 />
               </div>
+              
+              {aiProcessedMap && (
+                <div className="bg-green-50 p-4 rounded-lg border border-green-100 mb-6">
+                  <h4 className="font-medium mb-2">AI Processing Results</h4>
+                  <p className="text-sm text-gray-600">
+                    Our AI has identified {aiProcessedMap.layout.aisles.length} aisles and {aiProcessedMap.layout.sections.length} sections 
+                    in your store layout. We've also suggested placements for {aiProcessedMap.suggestions.length} common items.
+                  </p>
+                </div>
+              )}
               
               <div className="flex justify-between">
                 <button 
@@ -121,6 +140,7 @@ const StoreOwnerPage = () => {
               <h4 className="font-medium mb-1">Next Steps</h4>
               <p className="text-sm text-gray-600">
                 After confirming your store details, you'll be able to add items to your store map and specify their exact locations.
+                {aiProcessedMap ? " The AI has already suggested some common item placements to get you started." : ""}
               </p>
             </div>
           </div>
