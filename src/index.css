@@ -96,6 +96,26 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-montserrat;
+  }
+
+  .map-container {
+    @apply w-full h-[400px] rounded-lg shadow-md overflow-hidden border border-gray-200;
+  }
+
+  .store-card {
+    @apply bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-all duration-300;
+  }
+
+  .input-field {
+    @apply px-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400 w-full;
+  }
+
+  .btn-primary {
+    @apply bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg transition-colors;
   }
 }
