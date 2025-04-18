@@ -88,7 +88,7 @@ const StoresPage = () => {
                 address: store.address,
                 image: store.image,
                 itemCount: store.items.length,
-                distance: store.distance
+                distance: 'distance' in store ? store.distance : undefined
               }} 
             />
           ))}
