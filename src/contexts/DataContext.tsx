@@ -1,4 +1,3 @@
-
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Types for our data structures
@@ -52,7 +51,122 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 
 // Provider component
 export const DataProvider = ({ children }: { children: ReactNode }) => {
-  const [stores, setStores] = useState<Store[]>([]);
+  const [stores, setStores] = useState<Store[]>(() => {
+    const savedStores = localStorage.getItem('rudys-stores');
+    if (savedStores) {
+      try {
+        return JSON.parse(savedStores);
+      } catch (e) {
+        console.error('Failed to parse stored data', e);
+      }
+    }
+    
+    // Default stores data for Goa
+    return [
+      {
+        id: 'store-1',
+        name: 'Magsons Supermarket',
+        address: 'Dr E Borges Rd, Panaji, Goa 403001',
+        coordinates: {
+          lat: 15.4909,
+          lng: 73.8278
+        },
+        image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+        items: [
+          {
+            id: 'item-1',
+            name: 'Goan Fish Curry Masala',
+            aisle: 'A1',
+            section: 'Spices',
+            price: '₹120',
+            coordinates: [73.8278, 15.4909],
+            storeId: 'store-1'
+          },
+          {
+            id: 'item-2',
+            name: 'Cashew Nuts',
+            aisle: 'B2',
+            section: 'Dry Fruits',
+            price: '₹850',
+            coordinates: [73.8278, 15.4909],
+            storeId: 'store-1'
+          }
+        ]
+      },
+      {
+        id: 'store-2',
+        name: 'Newton Supermart',
+        address: '18th June Rd, Panaji, Goa 403001',
+        coordinates: {
+          lat: 15.4960,
+          lng: 73.8277
+        },
+        items: [
+          {
+            id: 'item-3',
+            name: 'Goan Chorizo',
+            aisle: 'C1',
+            section: 'Local Specialties',
+            price: '₹280',
+            coordinates: [73.8277, 15.4960],
+            storeId: 'store-2'
+          }
+        ]
+      },
+      {
+        id: 'store-3',
+        name: 'Delfinos Hypermarket',
+        address: 'Porvorim, Bardez, Goa 403501',
+        coordinates: {
+          lat: 15.5074,
+          lng: 73.8247
+        },
+        image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901',
+        items: [
+          {
+            id: 'item-4',
+            name: 'Coconut Oil',
+            aisle: 'D1',
+            section: 'Oils',
+            price: '₹180',
+            coordinates: [73.8247, 15.5074],
+            storeId: 'store-3'
+          },
+          {
+            id: 'item-5',
+            name: 'Bebinca',
+            aisle: 'E2',
+            section: 'Local Sweets',
+            price: '₹350',
+            coordinates: [73.8247, 15.5074],
+            storeId: 'store-3'
+          }
+        ]
+      },
+      {
+        id: 'store-4',
+        name: 'Kamat Supermarket',
+        address: 'Margao, Goa 403601',
+        coordinates: {
+          lat: 15.2832,
+          lng: 73.9862
+        },
+        image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04',
+        items: [
+          {
+            id: 'item-6',
+            name: 'Goan Vinegar',
+            aisle: 'F1',
+            section: 'Condiments',
+            price: '₹90',
+            coordinates: [73.9862, 15.2832],
+            storeId: 'store-4'
+          }
+        ]
+      }
+    ];
+  });
+
   const [storeOwner, setStoreOwner] = useState<StoreOwner | null>(() => {
     const saved = localStorage.getItem('storeOwner');
     return saved ? JSON.parse(saved) : null;
