@@ -7,7 +7,8 @@ import { getUserLocation, getDistance } from '../utils/location';
 import { toast } from '@/components/ui/sonner';
 import { MapPin } from 'lucide-react';
 
-interface StoreWithDistance extends ReturnType<typeof useData>['stores'][0] {
+// Using a more explicit type declaration to avoid the syntax error
+interface StoreWithDistance extends Omit<ReturnType<typeof useData>['stores'][number], 'distance'> {
   distance?: number;
 }
 
