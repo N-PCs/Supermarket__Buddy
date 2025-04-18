@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useData, Item } from '../contexts/DataContext';
+import { Image } from 'lucide-react';
 import ItemForm from '../components/ItemForm';
 import StoreMap from '../components/StoreMap';
-import Image from '../components/Image';
 
 const ManageStorePage = () => {
   const { storeId } = useParams<{ storeId: string }>();
