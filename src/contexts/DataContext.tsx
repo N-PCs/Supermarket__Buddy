@@ -1,3 +1,4 @@
+
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
 // Types for our data structures
@@ -65,71 +66,72 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
     return [
       {
         id: 'store-1',
-        name: 'Magsons Supermarket',
-        address: 'Dr E Borges Rd, Panaji, Goa 403001',
+        name: 'Mall De Goa',
+        address: 'Alto Porvorim, Bardez, Goa 403521',
         coordinates: {
-          lat: 15.4909,
-          lng: 73.8278
+          lat: 15.5074,
+          lng: 73.8247
         },
-        image: 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+        image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b',
         items: [
           {
             id: 'item-1',
-            name: 'Goan Fish Curry Masala',
+            name: 'Fresh Coconuts',
             aisle: 'A1',
-            section: 'Spices',
-            price: '₹120',
-            coordinates: [73.8278, 15.4909],
+            section: 'Fresh Produce',
+            price: '₹50',
+            coordinates: [73.8247, 15.5074],
             storeId: 'store-1'
           },
           {
             id: 'item-2',
-            name: 'Cashew Nuts',
+            name: 'Goan Sausages',
             aisle: 'B2',
-            section: 'Dry Fruits',
-            price: '₹850',
-            coordinates: [73.8278, 15.4909],
+            section: 'Meats',
+            price: '₹400',
+            coordinates: [73.8247, 15.5074],
             storeId: 'store-1'
           }
         ]
       },
       {
         id: 'store-2',
-        name: 'Newton Supermart',
-        address: '18th June Rd, Panaji, Goa 403001',
+        name: 'Caculo Mall',
+        address: 'St. Inez, Panaji, Goa 403001',
         coordinates: {
-          lat: 15.4960,
-          lng: 73.8277
+          lat: 15.4909,
+          lng: 73.8278
         },
+        image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
         items: [
           {
             id: 'item-3',
-            name: 'Goan Chorizo',
+            name: 'Kingfish (Vison)',
             aisle: 'C1',
-            section: 'Local Specialties',
-            price: '₹280',
-            coordinates: [73.8277, 15.4960],
+            section: 'Seafood',
+            price: '₹600',
+            coordinates: [73.8278, 15.4909],
             storeId: 'store-2'
           }
         ]
       },
       {
         id: 'store-3',
-        name: 'Delfinos Hypermarket',
-        address: 'Porvorim, Bardez, Goa 403501',
+        name: 'Magsons Superstore',
+        address: 'Miramar, Panaji, Goa 403001',
         coordinates: {
-          lat: 15.5074,
-          lng: 73.8247
+          lat: 15.4789,
+          lng: 73.8132
         },
-        image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901',
+        image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158',
         items: [
           {
             id: 'item-4',
-            name: 'Coconut Oil',
+            name: 'Goan Fish Curry Masala',
             aisle: 'D1',
-            section: 'Oils',
-            price: '₹180',
-            coordinates: [73.8247, 15.5074],
+            section: 'Spices',
+            price: '₹120',
+            coordinates: [73.8132, 15.4789],
             storeId: 'store-3'
           },
           {
@@ -138,29 +140,59 @@ export const DataProvider = ({ children }: { children: ReactNode }) => {
             aisle: 'E2',
             section: 'Local Sweets',
             price: '₹350',
-            coordinates: [73.8247, 15.5074],
+            coordinates: [73.8132, 15.4789],
             storeId: 'store-3'
           }
         ]
       },
       {
         id: 'store-4',
-        name: 'Kamat Supermarket',
-        address: 'Margao, Goa 403601',
+        name: 'Riverside Galleria Mall',
+        address: 'Baga Road, Calangute, Goa 403516',
         coordinates: {
-          lat: 15.2832,
-          lng: 73.9862
+          lat: 15.5503,
+          lng: 73.7668
         },
-        image: 'https://images.unsplash.com/photo-1721322800607-8c38375eef04',
+        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f',
         items: [
           {
             id: 'item-6',
-            name: 'Goan Vinegar',
+            name: 'Cashew Feni',
             aisle: 'F1',
-            section: 'Condiments',
-            price: '₹90',
-            coordinates: [73.9862, 15.2832],
+            section: 'Beverages',
+            price: '₹500',
+            coordinates: [73.7668, 15.5503],
             storeId: 'store-4'
+          }
+        ]
+      },
+      {
+        id: 'store-5',
+        name: 'Sahakari Spice Farm Market',
+        address: 'Ponda, Goa 403401',
+        coordinates: {
+          lat: 15.4027,
+          lng: 74.0078
+        },
+        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+        items: [
+          {
+            id: 'item-7',
+            name: 'Organic Black Pepper',
+            aisle: 'G1',
+            section: 'Organic Spices',
+            price: '₹180',
+            coordinates: [74.0078, 15.4027],
+            storeId: 'store-5'
+          },
+          {
+            id: 'item-8',
+            name: 'Vanilla Pods',
+            aisle: 'G2',
+            section: 'Organic Spices',
+            price: '₹400',
+            coordinates: [74.0078, 15.4027],
+            storeId: 'store-5'
           }
         ]
       }
