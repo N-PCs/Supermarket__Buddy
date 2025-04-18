@@ -9,6 +9,7 @@ interface StoreCardProps {
     address: string;
     image?: string;
     itemCount: number;
+    distance?: number;
   };
 }
 
@@ -29,10 +30,17 @@ const StoreCard = ({ store }: StoreCardProps) => {
         )}
       </div>
       <h3 className="font-semibold text-xl mb-2">{store.name}</h3>
-      <div className="flex items-start gap-2 text-gray-600 mb-4">
+      <div className="flex items-start gap-2 text-gray-600 mb-2">
         <MapPin size={18} className="mt-0.5 flex-shrink-0" />
         <p className="text-sm">{store.address}</p>
       </div>
+      {store.distance !== undefined && (
+        <p className="text-sm text-blue-600 mb-2">
+          {store.distance < 1 
+            ? `${Math.round(store.distance * 1000)} meters away`
+            : `${store.distance.toFixed(1)} km away`}
+        </p>
+      )}
       <p className="text-sm text-gray-500 mb-4">{store.itemCount} items mapped</p>
       <Link 
         to={`/store/${store.id}`}
