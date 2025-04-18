@@ -1,11 +1,6 @@
-
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-
-// You'll need to replace this with your actual Mapbox token
-// For production, this should be stored in environment variables or Supabase secrets
-const MAPBOX_TOKEN = 'pk.placeholder'; // This is just a placeholder
 
 interface StoreMapProps {
   storeData?: {
@@ -26,6 +21,57 @@ const StoreMap = ({ storeData, selectedItem, aiProcessedMap, viewOnly = false }:
   const map = useRef<mapboxgl.Map | null>(null);
   const marker = useRef<mapboxgl.Marker | null>(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [mapboxToken, setMapboxToken] = useState('');
+
+  const handleTokenSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('MAPBOX_TOKEN', mapboxToken);
+    window.location.reload(); // Refresh to apply the token
+  };
+
+  // Check for existing token
+  useEffect(() => {
+    const savedToken = localStorage.getItem('MAPBOX_TOKEN');
+    if (savedToken) {
+      setMapboxToken(savedToken);
+    }
+  }, []);
+
+  if (!mapboxToken) {
+    return (
+      <div className="container mx-auto py-10 px-6">
+        <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
+          <h2 className="text-2xl font-bold mb-4 text-center">Mapbox Token Required</h2>
+          <form onSubmit={handleTokenSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="mapboxToken" className="block text-sm font-medium text-gray-700">
+                Mapbox Public Token
+              </label>
+              <input 
+                type="text" 
+                id="mapboxToken"
+                value={mapboxToken}
+                onChange={(e) => setMapboxToken(e.target.value)}
+                placeholder="pk.ey..." 
+                required 
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+              />
+            </div>
+            <button 
+              type="submit" 
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+            >
+              Save Token
+            </button>
+          </form>
+          <div className="mt-4 text-sm text-gray-600 text-center">
+            <p>🔒 Your token is saved locally in browser storage.</p>
+            <p>Get your token at <a href="https://mapbox.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">mapbox.com</a></p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   useEffect(() => {
     if (!mapContainer.current) return;
@@ -38,7 +84,7 @@ const StoreMap = ({ storeData, selectedItem, aiProcessedMap, viewOnly = false }:
 
     const center = storeData ? [storeData.lng, storeData.lat] : [defaultLocation.lng, defaultLocation.lat];
 
-    mapboxgl.accessToken = MAPBOX_TOKEN;
+    mapboxgl.accessToken = mapboxToken;
     
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -112,7 +158,7 @@ const StoreMap = ({ storeData, selectedItem, aiProcessedMap, viewOnly = false }:
         map.current.remove();
       }
     };
-  }, [storeData, aiProcessedMap]);
+  }, [storeData, aiProcessedMap, mapboxToken]);
 
   // Add or update marker when selected item changes
   useEffect(() => {
@@ -141,11 +187,11 @@ const StoreMap = ({ storeData, selectedItem, aiProcessedMap, viewOnly = false }:
       .setHTML(`<h3>${selectedItem.name}</h3>`)
       .addTo(map.current);
 
-  }, [selectedItem]);
+  }, [selectedItem, mapboxToken]);
 
   return (
     <div className="relative">
-      {!MAPBOX_TOKEN || MAPBOX_TOKEN === 'pk.placeholder' ? (
+      {!mapboxToken ? (
         <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg z-10">
           <div className="text-center p-4">
             <p className="font-medium text-gray-700">Map functionality requires a Mapbox token</p>
