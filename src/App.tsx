@@ -5,8 +5,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DataProvider } from "./contexts/DataContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import NavbarThemePatch from "./components/NavbarThemePatch";
 
 // Pages
 import HomePage from "./pages/HomePage";
@@ -21,29 +23,32 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <DataProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-grow">
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/stores" element={<StoresPage />} />
-                <Route path="/store/:storeId" element={<StorePage />} />
-                <Route path="/store-owner" element={<StoreOwnerPage />} />
-                <Route path="/manage-store/:storeId" element={<ManageStorePage />} />
-                <Route path="/store-media/:storeId" element={<StoreMediaPage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </main>
-            <Footer />
-          </div>
-        </BrowserRouter>
-      </DataProvider>
-    </TooltipProvider>
+    <ThemeProvider>
+      <TooltipProvider>
+        <DataProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <div className="flex flex-col min-h-screen">
+              <Navbar />
+              <NavbarThemePatch />
+              <main className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/stores" element={<StoresPage />} />
+                  <Route path="/store/:storeId" element={<StorePage />} />
+                  <Route path="/store-owner" element={<StoreOwnerPage />} />
+                  <Route path="/manage-store/:storeId" element={<ManageStorePage />} />
+                  <Route path="/store-media/:storeId" element={<StoreMediaPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </DataProvider>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
