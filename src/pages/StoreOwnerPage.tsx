@@ -5,6 +5,7 @@ import { useData } from '../contexts/DataContext';
 import UploadMapForm from '../components/UploadMapForm';
 import StoreMap from '../components/StoreMap';
 import StoreOwnerAuth from '../components/StoreOwnerAuth';
+import { Store, Map, Upload } from 'lucide-react';
 
 const StoreOwnerPage = () => {
   const { addStore, isStoreOwnerLoggedIn } = useData();
@@ -88,10 +89,18 @@ const StoreOwnerPage = () => {
         {step === 1 ? (
           <div>
             <h2 className="text-2xl font-semibold mb-6 text-center">Upload Your Store Map</h2>
-            <p className="text-gray-600 mb-8 text-center">
-              Start by providing your store details and uploading a map of your store layout.
-              Our AI can automatically convert your layout image into an interactive map.
-            </p>
+            <div className="flex justify-center mb-8">
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 max-w-2xl">
+                <div className="flex items-center gap-3 mb-2">
+                  <Store size={20} className="text-blue-600" />
+                  <h3 className="font-medium text-blue-800">New! Flexible Store Uploading</h3>
+                </div>
+                <p className="text-sm text-blue-700">
+                  You can now add your store using our map integration OR by simply uploading your store details manually.
+                  Both options allow you to upload your store layout map for AI processing.
+                </p>
+              </div>
+            </div>
             <UploadMapForm onSubmit={handleStoreSubmit} />
           </div>
         ) : (
